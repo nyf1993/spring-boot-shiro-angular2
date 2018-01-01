@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nyf.test.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.nyf.test.model.Role">
+        <id column="id" property="id" jdbcType="TINYINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="sn" property="sn" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, sn
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Byte">
+        select
+        <include refid="Base_Column_List"/>
+        from t_role
+        where id = #{id,jdbcType=TINYINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
+        delete from t_role
+        where id = #{id,jdbcType=TINYINT}
+    </delete>
+    <insert id="insert" parameterType="com.nyf.test.model.Role">
+        insert into t_role (id, name, sn)
+        values (#{id,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.nyf.test.model.Role">
+        insert into t_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="sn != null">
+                sn,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                #{sn,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.nyf.test.model.Role">
+        update t_role
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                sn = #{sn,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=TINYINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.nyf.test.model.Role">
+        update t_role
+        set name = #{name,jdbcType=VARCHAR},
+        sn = #{sn,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=TINYINT}
+    </update>
+    <select id="findRoleByUserId" resultType="com.nyf.test.model.Role">
+        SELECT role.id,role.name from t_user_role urole
+        left join t_role role on urole.role_id = role.id where urole.id = #{userId}
+    </select>
+</mapper>
